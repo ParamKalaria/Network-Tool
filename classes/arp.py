@@ -4,7 +4,7 @@ import subprocess
 import re
 from tabulate import tabulate
 
-def arp_scan():
+def scan():
     system = platform.system()
     
     if system == "Windows":
@@ -16,15 +16,14 @@ def arp_scan():
 
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     output = result.stdout
-
-    # Extract IP and MAC addresses using regex
-    arp_entries = re.findall(r'([-.0-9]+)\s+([-0-9a-fA-F:]+)', output)
-    
+    arp_entries = re.findall(r'([-.0-9]+)\s+([-0-9a-fA-F:]+)', output)    
     return arp_entries
 
-# Fetch ARP table and display in tabulated format
-arp_table = arp_scan()
-if isinstance(arp_table, list):
-    print(tabulate(arp_table, headers=["IP Address", "MAC Address"], tablefmt="grid"))
-else:
-    print(arp_table)
+
+
+def arp_scan():
+    arp_table = scan()
+    if isinstance(arp_table, list):
+        print(tabulate(arp_table, headers=["IP Address", "MAC Address"], tablefmt="grid"))
+    else:
+        print(arp_table)

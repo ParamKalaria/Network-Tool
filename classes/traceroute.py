@@ -1,30 +1,23 @@
+from scapy.all import IP, ICMP, sr1
 from tabulate import tabulate
-import subprocess
-def traceroute(ip):
-    
+import time
 
-    try:
-        # Run the traceroute command
-        result = subprocess.run(['tracert', ip], capture_output=True, text=True, check=True)
+def traceroute(destination, max_hops=30):
+    results = []
 
-        # Split the output into lines
-        lines = result.stdout.strip().split('\n')
+    for ttl in range(1, max_hops + 1):
+        packet = IP(dst=destination, ttl=ttl) / ICMP()
+        start_time = time.time()
+        reply = sr1(packet, timeout=1, verbose=False)
+        end_time = time.time()
 
-        # Prepare headers and rows for the table
-        headers = ["Hop", "IP Address", "RTT"]
-        rows = []
+        if reply is None:
+            results.append([ttl, "*", "-"])
+        else:
+            rtt = round((end_time - start_time) * 1000, 2)  # Convert to milliseconds
+            results.append([ttl, reply.src, f"{rtt} ms"])
+            if reply.src == destination:
+                break
 
-        for line in lines[1:]:  # Skip the first line which is usually a header
-            parts = line.split()
-            if len(parts) >= 3:
-                hop = parts[0]
-                ip_address = parts[1]
-                rtt = ' '.join(parts[2:])  # Join remaining parts as RTT
-                rows.append([hop, ip_address, rtt])
+    return tabulate(results, headers=["Hop", "IP Address", "RTT"], tablefmt="grid")
 
-        return tabulate(rows, headers=headers, tablefmt="grid")
-
-    except subprocess.CalledProcessError as e:
-        return f"Error: {e.stderr.strip()}"
-    except Exception as e:
-        return f"An unexpected error occurred: {str(e)}"
