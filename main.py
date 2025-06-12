@@ -2,6 +2,7 @@ from classes import ipinfo
 from classes import traceroute
 from classes import networkscan
 from classes import arp
+from classes import portscanner
 
 import sys
 
@@ -99,12 +100,35 @@ def task_select():
 
 
 
+
+    elif task == 'portscan':
+        try:
+            ip = sys.argv[2] if len(sys.argv) > 2 else None
+            if not ip:
+                print("No IP address specified. Please provide an IP address as a command line argument.")
+                exit(1)
+            
+            port_input = sys.argv[3] if len(sys.argv) > 3 else None
+            if not port_input:
+                print("No port or port range specified. Please provide a port or port range as a command line argument.")
+                exit(1)
+            
+            result = portscanner.scan_ports(ip, port_input)
+            print(result)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
+
+
+
     elif task == 'help':
         print("Available tasks:")
         print("  ipinfo <ip_address> - Get information about an IP address")
         print("  traceroute <ip_address> - Perform a traceroute to an IP address")
         print("  networkscan <ip_address> [subnet_mask] - Scan a network for active hosts (default subnet mask is /24)")
         print("  arp <ip_address> - Perform an ARP scan on the specified IP address")
+        print("  portscan <ip_address> <port|port_range> - Scan ports on the specified IP address (e.g., 80, 1-100, full)")
         print("  help - Show this help message")
 
 
