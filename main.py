@@ -3,6 +3,9 @@ from classes import traceroute
 from classes import networkscan
 from classes import arp
 from classes import portscanner
+from classes import myip
+
+
 
 import sys
 
@@ -85,13 +88,7 @@ def task_select():
 
     elif task == 'arp':
         try:
-            ip = sys.argv[2] if len(sys.argv) > 2 else None
-            if not ip:
-                print("No IP address specified. Please provide an IP address as a command line argument.")
-                exit(1)
-            
-            
-            result = arp.arp_scan(ip)
+            result = arp.arp_scan()
             print("ARP scan results:")
             for host in result:
                 print(host)
@@ -120,6 +117,16 @@ def task_select():
 
 
 
+    
+    
+    elif task == 'myip':
+        try:
+            result = myip.get_ip_details()
+            print(result)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
 
 
     elif task == 'help':
@@ -127,8 +134,9 @@ def task_select():
         print("  ipinfo <ip_address> - Get information about an IP address")
         print("  traceroute <ip_address> - Perform a traceroute to an IP address")
         print("  networkscan <ip_address> [subnet_mask] - Scan a network for active hosts (default subnet mask is /24)")
-        print("  arp <ip_address> - Perform an ARP scan on the specified IP address")
+        print("  arp - Perform an ARP scan on the System")
         print("  portscan <ip_address> <port|port_range> - Scan ports on the specified IP address (e.g., 80, 1-100, full)")
+        print("  myip - Get your public IP address and country information")
         print("  help - Show this help message")
 
 
@@ -140,12 +148,3 @@ def task_select():
     exit(1)
     
 
-
-def main():
-    
-    task_select()
-
-
-
-if __name__ == "__main__":
-    main()
