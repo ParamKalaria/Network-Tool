@@ -4,7 +4,7 @@ from classes import networkscan
 from classes import arp
 from classes import portscanner
 from classes import myip
-
+from classes import networkint
 
 
 import sys
@@ -129,6 +129,15 @@ def task_select():
 
 
 
+
+    elif task == 'networkint':
+        try:
+            result = networkint.list_network_interfaces()
+            print(result)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
     elif task == 'help':
         print("Available tasks:")
         print("  ipinfo <ip_address> - Get information about an IP address")
@@ -137,6 +146,7 @@ def task_select():
         print("  arp - Perform an ARP scan on the System")
         print("  portscan <ip_address> <port|port_range> - Scan ports on the specified IP address (e.g., 80, 1-100, full)")
         print("  myip - Get your public IP address and country information")
+        print("  networkint - List all network interfaces and their details")
         print("  help - Show this help message")
 
 
