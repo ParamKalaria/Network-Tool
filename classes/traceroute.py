@@ -19,5 +19,5 @@ def traceroute(destination, max_hops=30):
             if reply.src == destination:
                 break
 
-    return tabulate(results, headers=["Hop", "IP Address", "RTT"], tablefmt="grid")
+    print(tabulate(results, headers=["Hop", "IP Address", "RTT"], tablefmt="grid"))
 

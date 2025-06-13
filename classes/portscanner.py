@@ -19,4 +19,4 @@ def scan_ports(target, port_input):
         else:
             results.append([port, "Closed/Filtered"])
 
-    return tabulate(results, headers=["Port", "Status"], tablefmt="grid")
+    print(tabulate(results, headers=["Port", "Status"], tablefmt="grid"))

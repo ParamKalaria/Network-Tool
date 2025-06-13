@@ -37,9 +37,5 @@ def networkscan(ip,subnet_mask):
         print(f"Invalid subnet mask: {e}")
         exit()
 
-
     scan_results = icmp_scan(ip, subnet_mask)
-
-
-    print(f"\nScan Results for {ip}/{subnet_mask}:")
-    return tabulate(scan_results, headers=["IP Address", "Status"], tablefmt="grid")
+    print(tabulate(scan_results, headers=["IP Address", "Status"], tablefmt="grid"))

@@ -17,8 +17,7 @@ def ipinfo(ip):
         # Table with headers at the top and data in a row
         headers = ["IP Address", "Country", "ISP"]
         row = [[ip_address, country, isp]]
-
-        return tabulate(row, headers=headers, tablefmt="grid")
+        print(tabulate(row, headers=headers, tablefmt="grid"))
 
     except json.JSONDecodeError:
         print("Error: Could not decode JSON response.")

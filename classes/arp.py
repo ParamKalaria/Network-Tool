@@ -26,4 +26,4 @@ def arp_scan():
     if isinstance(arp_table, list):
         print(tabulate(arp_table, headers=["IP Address", "MAC Address"], tablefmt="grid"))
     else:
-        print(arp_table)
+       print(arp_table)
