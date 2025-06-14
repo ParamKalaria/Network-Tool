@@ -4,7 +4,7 @@ import main
 
 
 
-big_text = pyfiglet.figlet_format("Network Tool")
+big_text = Fore.CYAN + Style.BRIGHT + pyfiglet.figlet_format("Network Tool")
 
 
 small_text = Fore.YELLOW + Style.BRIGHT + "by Param Kalaria" + Style.RESET_ALL

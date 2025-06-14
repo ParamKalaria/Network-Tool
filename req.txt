@@ -2,3 +2,4 @@ scapy
 tabulate
 icmplib
 pyfiglet
+speedtest-cli

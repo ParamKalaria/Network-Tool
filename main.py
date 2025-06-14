@@ -5,7 +5,7 @@ from classes import arp
 from classes import portscanner
 from classes import myip
 from classes import networkint
-
+from classes import speedtest
 
 import sys
 
@@ -138,6 +138,17 @@ def task_select():
             print(f"An error occurred: {e}")
 
 
+
+    elif task == 'speedtest':
+        try:
+            result = speedtest.speed_test()
+            print(result)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
+
+
     elif task == 'help':
         print("Available tasks:")
         print("  ipinfo <ip_address> - Get information about an IP address")
@@ -147,6 +158,7 @@ def task_select():
         print("  portscan <ip_address> <port|port_range> - Scan ports on the specified IP address (e.g., 80, 1-100, full)")
         print("  myip - Get your public IP address and country information")
         print("  networkint - List all network interfaces and their details")
+        print("  speedtest - Perform a speed test to check download and upload speeds")
         print("  help - Show this help message")
 
 
