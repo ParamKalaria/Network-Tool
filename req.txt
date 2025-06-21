@@ -3,3 +3,12 @@ tabulate
 icmplib
 pyfiglet
 speedtest-cli
+platform
+subprocess
+re
+requests
+json
+sys
+psutil
+ipaddress
+time

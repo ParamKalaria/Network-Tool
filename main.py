@@ -20,7 +20,7 @@ def task_select():
     task= sys.argv[1] if len(sys.argv) > 1 else None
     if not task:
         print("No task specified. Please provide a task as a command line argument.")
-        exit(1)
+        exit()
     
     
    
@@ -33,11 +33,10 @@ def task_select():
             ip = sys.argv[2] if len(sys.argv) > 2 else None
             if not ip:
                 print("No IP address specified. Please provide an IP address as a command line argument.")
-                exit(1)
+                exit()
             
 
-            result = ipinfo.ipinfo(ip)
-            print(result)
+            ipinfo.ipinfo(ip)
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -51,10 +50,9 @@ def task_select():
             ip = sys.argv[2] if len(sys.argv) > 2 else None
             if not ip:
                 print("No IP address specified. Please provide an IP address as a command line argument.")
-                exit(1)
+                exit()
             
-            result = traceroute.traceroute(ip)
-            print(result)
+            traceroute.traceroute(ip)
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -68,15 +66,14 @@ def task_select():
             ip = sys.argv[2] if len(sys.argv) > 2 else None
             if not ip:
                 print("No IP address specified. Please provide an IP address as a command line argument.")
-                exit(1)
+                exit()
             
             subnet_mask = sys.argv[3] if len(sys.argv) > 3 else '24'
             if not sys.argv[3:]:
                 print("No subnet mask specified. Defaulting to /24.")
-                exit(1)
+                exit()
             
-            result = networkscan.networkscan(ip, subnet_mask)
-            print(result)
+            networkscan.networkscan(ip, subnet_mask)
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -88,10 +85,7 @@ def task_select():
 
     elif task == 'arp':
         try:
-            result = arp.arp_scan()
-            print("ARP scan results:")
-            for host in result:
-                print(host)
+            arp.arp_scan()
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -103,15 +97,15 @@ def task_select():
             ip = sys.argv[2] if len(sys.argv) > 2 else None
             if not ip:
                 print("No IP address specified. Please provide an IP address as a command line argument.")
-                exit(1)
+                exit()
             
             port_input = sys.argv[3] if len(sys.argv) > 3 else None
             if not port_input:
                 print("No port or port range specified. Please provide a port or port range as a command line argument.")
-                exit(1)
+                exit()
             
-            result = portscanner.scan_ports(ip, port_input)
-            print(result)
+            portscanner.scan_ports(ip, port_input)
+            
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -121,8 +115,7 @@ def task_select():
     
     elif task == 'myip':
         try:
-            result = myip.get_ip_details()
-            print(result)
+            myip.get_ip_details()            
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -132,8 +125,7 @@ def task_select():
 
     elif task == 'networkint':
         try:
-            result = networkint.list_network_interfaces()
-            print(result)
+            networkint.list_network_interfaces()
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -141,8 +133,7 @@ def task_select():
 
     elif task == 'speedtest':
         try:
-            result = speedtest.speed_test()
-            print(result)
+            speedtest.speed_test()
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -163,10 +154,20 @@ def task_select():
 
 
 
-
-
     else:
         print(f"Unknown task: {task}. Please provide a valid task.")
-    exit(1)
     
+    
+    exit()
+    
+
+if __name__ == "__main__":
+    try:
+        task_select()
+    except KeyboardInterrupt:
+        print("\nProcess interrupted by user.")
+        exit()
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        exit()
 

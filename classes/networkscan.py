@@ -2,40 +2,26 @@ import ipaddress
 from icmplib import multiping
 from tabulate import tabulate
 
-def icmp_scan(network_base, subnet_mask):
-    try:
-        network = ipaddress.ip_network(f"{network_base}/{subnet_mask}", strict=False)
-        ip_list = [str(ip) for ip in network.hosts()]  # Get usable hosts
-
-        if not ip_list:
-            print(f"No hosts found in subnet {network_base}/{subnet_mask}")
-            return []
-
-        ping_results = multiping(ip_list, count=1, timeout=2)
-        responses = [[ip, "Active" if host.is_alive else "Inactive"] for ip, host in zip(ip_list, ping_results)]
-
-    except KeyboardInterrupt:
-        print("Scan interrupted by user.")
-        return []
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return []
-
-    return responses
-
-
-
-
-def networkscan(ip,subnet_mask):
-
+def networkscan(ip, subnet_mask):
     try:
         subnet_mask = int(subnet_mask)
-        if subnet_mask < 1 or subnet_mask > 32:
-            raise ValueError("Subnet mask must be between 1 and 32.")
-    except ValueError as e:
-        print(f"Invalid subnet mask: {e}")
-        exit()
+        if not (1 <= subnet_mask <= 32):
+            print("Subnet mask must be between 1 and 32.")
+            return
 
-    scan_results = icmp_scan(ip, subnet_mask)
-    print(tabulate(scan_results, headers=["IP Address", "Status"], tablefmt="grid"))
+        network = ipaddress.ip_network(f"{ip}/{subnet_mask}", strict=False)
+        ip_list = [str(host) for host in network.hosts()]
+        if not ip_list:
+            print(f"No usable hosts found in {ip}/{subnet_mask}")
+            return
+
+        results = multiping(ip_list, count=1, timeout=2)
+        output = [[ip_addr, "Active" if resp.is_alive else "Inactive"]
+                  for ip_addr, resp in zip(ip_list, results)]
+        
+        print(tabulate(output, headers=["IP Address", "Status"], tablefmt="grid"))
+
+    except ValueError:
+        print("Invalid subnet mask. Please provide a number between 1 and 32.")
+    except Exception as e:
+        print(f"Unexpected error: {e}")

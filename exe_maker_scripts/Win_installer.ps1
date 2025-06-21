@@ -1,14 +1,14 @@
-$pythonScript = "Network-Tool.py"
-$class_folder = "$PSScriptRoot\classes\"
+$pythonScript = "main.py"
+$class_folder = "$PSScriptRoot\classes"
 
 $classFiles = @(
-    "$class_folder\arp.py",
-    "$class_folder\ipinfo.py",
-    "$class_folder\myip.py",
-    "$class_folder\networkint.py",
-    "$class_folder\networkscan.py",
-    "$class_folder\portscanner.py",
-    "$class_folder\traceroute.py"
+    "arp.py",
+    "ipinfo.py",
+    "myip.py",
+    "networkint.py",
+    "networkscan.py",
+    "portscanner.py",
+    "traceroute.py"
 )
 
 $hiddenImports = $classFiles -join " --hidden-import="

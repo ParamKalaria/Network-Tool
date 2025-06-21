@@ -1,31 +1,43 @@
-import psutil
+import ipaddress
+from icmplib import multiping
 from tabulate import tabulate
 
-def list_network_interfaces():
-    table_data = []
-    interfaces = psutil.net_if_addrs()
+def networkscan(ip, subnet_mask):
+    try:
+        # Validate subnet mask
+        try:
+            subnet_mask = int(subnet_mask)
+            if not (1 <= subnet_mask <= 32):
+                raise ValueError
+        except ValueError:
+            print("Invalid subnet mask. Please provide a number between 1 and 32.")
+            return
 
-    for interface, addresses in interfaces.items():
-        mac_address = "N/A"  # Default MAC address placeholder
+        # Calculate network and hosts
+        try:
+            network = ipaddress.ip_network(f"{ip}/{subnet_mask}", strict=False)
+            ip_list = [str(host) for host in network.hosts()]
+            if not ip_list:
+                print(f"No usable hosts found in {ip}/{subnet_mask}")
+                return
+        except Exception as e:
+            print(f"Network parsing error: {e}")
+            return
 
-        for addr in addresses:
-            family = "Unknown"
-            if addr.family.name == "AF_INET":  # IPv4
-                family = "IPv4"
-            elif addr.family.name == "AF_INET6":  # IPv6
-                family = "IPv6"
-            elif addr.family.name == "AF_LINK":  # MAC Address
-                mac_address = addr.address
-                continue  # Skip adding MAC address to IP rows
+        # Perform ping scan
+        try:
+            results = multiping(ip_list, count=1, timeout=2)
+            output = [[ip_addr, "Active" if resp.is_alive else "Inactive"]
+                      for ip_addr, resp in zip(ip_list, results)]
+        except Exception as e:
+            print(f"ICMP scan failed: {e}")
+            return
 
-            table_data.append([
-                interface,
-                family,
-                addr.address,
-                addr.netmask if addr.netmask else "N/A",
-                mac_address  # MAC Address is displayed separately
-            ])
+        # Display results
+        try:
+            print(tabulate(output, headers=["IP Address", "Status"], tablefmt="grid"))
+        except Exception as e:
+            print(f"Error formatting output: {e}")
 
-    headers = ["Interface", "Type", "Address", "Netmask", "MAC Address"]
-    print(tabulate(table_data, headers, tablefmt="grid"))
-
+    except KeyboardInterrupt:
+        print("\nScan interrupted by user.")
