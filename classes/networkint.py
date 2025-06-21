@@ -1,43 +1,33 @@
-import ipaddress
-from icmplib import multiping
+import psutil
 from tabulate import tabulate
 
-def networkscan(ip, subnet_mask):
+def list_network_interfaces():
     try:
-        # Validate subnet mask
-        try:
-            subnet_mask = int(subnet_mask)
-            if not (1 <= subnet_mask <= 32):
-                raise ValueError
-        except ValueError:
-            print("Invalid subnet mask. Please provide a number between 1 and 32.")
-            return
+        table_data = []
+        interfaces = psutil.net_if_addrs()
 
-        # Calculate network and hosts
-        try:
-            network = ipaddress.ip_network(f"{ip}/{subnet_mask}", strict=False)
-            ip_list = [str(host) for host in network.hosts()]
-            if not ip_list:
-                print(f"No usable hosts found in {ip}/{subnet_mask}")
-                return
-        except Exception as e:
-            print(f"Network parsing error: {e}")
-            return
+        for interface, addresses in interfaces.items():
+            mac_address = next((addr.address for addr in addresses if addr.family.name == "AF_LINK"), "N/A")
 
-        # Perform ping scan
-        try:
-            results = multiping(ip_list, count=1, timeout=2)
-            output = [[ip_addr, "Active" if resp.is_alive else "Inactive"]
-                      for ip_addr, resp in zip(ip_list, results)]
-        except Exception as e:
-            print(f"ICMP scan failed: {e}")
-            return
+            for addr in addresses:
+                if addr.family.name == "AF_LINK":
+                    continue
 
-        # Display results
-        try:
-            print(tabulate(output, headers=["IP Address", "Status"], tablefmt="grid"))
-        except Exception as e:
-            print(f"Error formatting output: {e}")
+                family = {
+                    "AF_INET": "IPv4",
+                    "AF_INET6": "IPv6"
+                }.get(addr.family.name, "Unknown")
 
-    except KeyboardInterrupt:
-        print("\nScan interrupted by user.")
+                table_data.append([
+                    interface,
+                    family,
+                    addr.address,
+                    addr.netmask or "N/A",
+                    mac_address
+                ])
+
+        headers = ["Interface", "Type", "Address", "Netmask", "MAC Address"]
+        return(tabulate(table_data, headers, tablefmt="grid"))
+
+    except Exception as e:
+        return(f"[!] Error fetching network interfaces: {e}")

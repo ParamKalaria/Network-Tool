@@ -1,4 +1,5 @@
 import speedtest
+from tabulate import tabulate
 
 def speed_test():
     try:
@@ -9,15 +10,19 @@ def speed_test():
         upload_speed = st.upload() / 1_000_000
         ping = st.results.ping
 
-        print(f"Download Speed: {download_speed:.2f} Mbps")
-        print(f"Upload Speed: {upload_speed:.2f} Mbps")
-        print(f"Ping: {ping:.2f} ms")
+        table = [
+            ["Download Speed", f"{download_speed:.2f} Mbps"],
+            ["Upload Speed", f"{upload_speed:.2f} Mbps"],
+            ["Ping", f"{ping:.2f} ms"]
+        ]
+        return tabulate(table, headers=["Metric", "Value"], tablefmt="fancy_grid")
+        
 
     except speedtest.ConfigRetrievalError:
-        print("Could not retrieve configuration. Check your internet connection.")
+        return("Could not retrieve configuration. Check your internet connection.")
     except speedtest.NoMatchedServers:
-        print("No suitable test server found.")
+        return("No suitable test server found.")
     except speedtest.SpeedtestException as e:
-        print(f"Speedtest failed: {e}")
+        return(f"Speedtest failed: {e}")
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        return(f"Unexpected error: {e}")

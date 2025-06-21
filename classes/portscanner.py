@@ -24,9 +24,9 @@ def scan_ports(target, port_input):
             except Exception as e:
                 results.append([port, f"Error: {e}"])
 
-        print(tabulate(results, headers=["Port", "Status"], tablefmt="grid"))
+        return(tabulate(results, headers=["Port", "Status"], tablefmt="grid"))
 
     except ValueError:
-        print("Invalid port input. Use a number, a range (e.g. 20-80), or 'full'.")
+        return("Invalid port input. Use a number, a range (e.g. 20-80), or 'full'.")
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        return(f"Unexpected error: {e}")

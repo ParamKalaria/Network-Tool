@@ -13,7 +13,7 @@ def get_ip_details():
             return f"Error: Unable to fetch data, status code {response.status_code}"
         headers = ["ip", "country"]
         values = [data["ip"], data["country"]]
-        print(tabulate([values], headers=headers, tablefmt="grid"))
+        return(tabulate([values], headers=headers, tablefmt="grid"))
 
     except requests.exceptions.RequestException as e:
-        print("Error fetching IP details: {e}" )
+        return("Error fetching IP details: {e}" )

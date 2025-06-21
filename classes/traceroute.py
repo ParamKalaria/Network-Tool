@@ -23,6 +23,6 @@ def traceroute(destination, max_hops=30):
             except Exception as hop_error:
                 results.append([ttl, "Error", str(hop_error)])
 
-        print(tabulate(results, headers=["Hop", "IP Address", "RTT"], tablefmt="grid"))
+        return(tabulate(results, headers=["Hop", "IP Address", "RTT"], tablefmt="grid"))
     except Exception as e:
-        print(f"Traceroute failed: {e}")
+        return(f"Traceroute failed: {e}")
