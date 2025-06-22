@@ -10,7 +10,7 @@ def get_ip_details():
         response = requests.get(url)
         data = response.json()
         if response.status_code != 200:
-            return f"Error: Unable to fetch data, status code {response.status_code}"
+            return (f"Error: Unable to fetch data, status code {response.status_code}")
         headers = ["ip", "country"]
         values = [data["ip"], data["country"]]
         return(tabulate([values], headers=headers, tablefmt="grid"))

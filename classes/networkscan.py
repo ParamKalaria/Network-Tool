@@ -7,13 +7,13 @@ def networkscan(ip, subnet_mask):
         subnet_mask = int(subnet_mask)
         if not (1 <= subnet_mask <= 32):
             return("Subnet mask must be between 1 and 32.")
-            return
+            
 
         network = ipaddress.ip_network(f"{ip}/{subnet_mask}", strict=False)
         ip_list = [str(host) for host in network.hosts()]
         if not ip_list:
             return(f"No usable hosts found in {ip}/{subnet_mask}")
-            return
+            
 
         results = multiping(ip_list, count=1, timeout=2)
         output = [[ip_addr, "Active" if resp.is_alive else "Inactive"]

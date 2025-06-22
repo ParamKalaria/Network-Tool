@@ -35,47 +35,83 @@ def run_tool(tool):
     except Exception as e:
         output_text.insert(tk.END, f"[!] Error running {tool}: {e}")
 
+def clear_output():
+    output_text.delete(1.0, tk.END)
+
+def save_output():
+    try:
+        content = output_text.get(1.0, tk.END).strip()
+        if not content:
+            messagebox.showinfo("Save Output", "There is no output to save.")
+            return
+        with open("nettoolkit_output.txt", "w", encoding="utf-8") as f:
+            f.write(content)
+        messagebox.showinfo("Save Output", "Output saved to 'nettoolkit_output.txt'")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to save output: {e}")
+
 root = tk.Tk()
-root.title("NetToolkit Dashboard")
-root.geometry("900x600")
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
+root.title("Network Tool by Param Kalaria")
+root.geometry("1000x600")
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
 
-paned = tk.PanedWindow(root, sashrelief=tk.RAISED)
-paned.pack(fill=tk.BOTH, expand=1)
+# Horizontal splitter
+paned = tk.PanedWindow(root, orient=tk.HORIZONTAL, sashrelief=tk.RAISED)
+paned.grid(row=0, column=0, sticky="nsew")
 
-# LEFT PANEL: Tool Selection
-left_frame = tk.Frame(paned, padx=10, pady=10)
-left_frame.grid_rowconfigure(0, weight=1)
-left_frame.grid_columnconfigure(0, weight=1)
+# ==== LEFT PANEL ====
+left_panel = tk.Frame(paned)
+left_panel.grid_rowconfigure(1, weight=1)
+left_panel.grid_columnconfigure(0, weight=1)
 
-tools = ['ipinfo', 'traceroute', 'networkscan', 'arp', 'portscan', 'myip', 'networkint', 'speedtest']
-for idx, tool in enumerate(tools):
-    b = tk.Button(left_frame, text=tool.capitalize(), width=18, command=lambda t=tool: run_tool(t))
-    b.grid(row=idx, column=0, sticky="ew", pady=2)
+# Top-left: Input fields
+input_frame = tk.Frame(left_panel, padx=10, pady=10)
+input_frame.grid(row=0, column=0, sticky="new")
 
-paned.add(left_frame)
+tk.Label(input_frame, text="IP Address:").grid(row=0, column=0, sticky="e", padx=5, pady=2)
+ip_entry = tk.Entry(input_frame)
+ip_entry.grid(row=0, column=1, sticky="ew", pady=2)
 
-# RIGHT PANEL: Inputs + Output
+tk.Label(input_frame, text="Port / Range:").grid(row=1, column=0, sticky="e", padx=5, pady=2)
+port_entry = tk.Entry(input_frame)
+port_entry.grid(row=1, column=1, sticky="ew", pady=2)
+
+tk.Label(input_frame, text="Subnet Mask:").grid(row=2, column=0, sticky="e", padx=5, pady=2)
+mask_entry = tk.Entry(input_frame)
+mask_entry.grid(row=2, column=1, sticky="ew", pady=2)
+
+input_frame.grid_columnconfigure(1, weight=1)
+
+# Bottom-left: Tool buttons
+button_frame = tk.Frame(left_panel, padx=10, pady=10)
+button_frame.grid(row=1, column=0, sticky="nsew")
+for idx, tool in enumerate(['ipinfo', 'traceroute', 'networkscan', 'arp', 'portscan', 'myip', 'networkint', 'speedtest']):
+    tk.Button(
+        button_frame,
+        text=tool.capitalize(),
+        width=20,
+        command=lambda t=tool: run_tool(t)
+    ).grid(row=idx, column=0, sticky="ew", pady=2)
+
+paned.add(left_panel, minsize=500)
+
+# ==== RIGHT PANEL ====
 right_frame = tk.Frame(paned, padx=10, pady=10)
-right_frame.grid_rowconfigure(3, weight=1)
-right_frame.grid_columnconfigure(1, weight=1)
+right_frame.grid_rowconfigure(0, weight=1)
+right_frame.grid_columnconfigure(0, weight=1)
 
-tk.Label(right_frame, text="IP Address:").grid(row=0, column=0, sticky="e", padx=5, pady=5)
-ip_entry = tk.Entry(right_frame)
-ip_entry.grid(row=0, column=1, sticky="ew", pady=5)
-
-tk.Label(right_frame, text="Port / Range:").grid(row=1, column=0, sticky="e", padx=5, pady=5)
-port_entry = tk.Entry(right_frame)
-port_entry.grid(row=1, column=1, sticky="ew", pady=5)
-
-tk.Label(right_frame, text="Subnet Mask:").grid(row=2, column=0, sticky="e", padx=5, pady=5)
-mask_entry = tk.Entry(right_frame)
-mask_entry.grid(row=2, column=1, sticky="ew", pady=5)
-
+# Output text area
 output_text = scrolledtext.ScrolledText(right_frame, wrap=tk.WORD)
-output_text.grid(row=3, column=0, columnspan=2, sticky="nsew", pady=10)
+output_text.grid(row=0, column=0, columnspan=2, sticky="nsew", pady=(0, 10))
 
-paned.add(right_frame)
+# Buttons for clear/save
+utility_frame = tk.Frame(right_frame)
+utility_frame.grid(row=1, column=0, columnspan=2, sticky="e", pady=5)
+
+tk.Button(utility_frame, text="Clear Output", command=clear_output).pack(side=tk.RIGHT, padx=5)
+tk.Button(utility_frame, text="Save Output", command=save_output).pack(side=tk.RIGHT)
+
+paned.add(right_frame, minsize=500)
 
 root.mainloop()

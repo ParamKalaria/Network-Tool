@@ -15,7 +15,7 @@ def speed_test():
             ["Upload Speed", f"{upload_speed:.2f} Mbps"],
             ["Ping", f"{ping:.2f} ms"]
         ]
-        return tabulate(table, headers=["Metric", "Value"], tablefmt="fancy_grid")
+        return (tabulate(table, headers=["Metric", "Value"], tablefmt="fancy_grid"))
         
 
     except speedtest.ConfigRetrievalError:

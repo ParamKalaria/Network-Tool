@@ -9,7 +9,7 @@ def arp_scan():
         command = "arp -a"
     elif system == "Linux":
         command = "arp -n"
-    elif system == "Darwin":  # macOS support
+    elif system == "Darwin":
         command = "arp -a"
     else:
         return("Unsupported OS")
