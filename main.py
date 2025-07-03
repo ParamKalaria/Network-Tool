@@ -34,7 +34,7 @@ def task_select():
         if not ip:
             print("No IP address specified. Please provide an IP address as a command line argument.")
             exit()
-        ipinfo.ipinfo(ip)
+        print(ipinfo.ipinfo(ip))
         
 
     
@@ -48,7 +48,7 @@ def task_select():
         if not ip:
             print("No IP address specified. Please provide an IP address as a command line argument.")
             exit()
-        traceroute.traceroute(ip)
+        print(traceroute.traceroute(ip))
        
 
     
@@ -67,7 +67,7 @@ def task_select():
         if not sys.argv[3:]:
             print("No subnet mask specified. Defaulting to /24.")
             exit()
-        networkscan.networkscan(ip, subnet_mask)
+        print(networkscan.networkscan(ip, subnet_mask))
         
 
 
@@ -77,7 +77,7 @@ def task_select():
 
 
     elif task == 'arp':
-        arp.arp_scan()
+        print(arp.arp_scan())
         
 
 
@@ -94,7 +94,7 @@ def task_select():
             print("No port or port range specified. Please provide a port or port range as a command line argument.")
             exit()
         
-        portscanner.scan_ports(ip, port_input)
+        print(portscanner.scan_ports(ip, port_input))
             
         
 
@@ -103,7 +103,7 @@ def task_select():
     
     
     elif task == 'myip':        
-        myip.get_ip_details()            
+        print(myip.get_ip_details())
         
 
 
@@ -111,13 +111,13 @@ def task_select():
 
 
     elif task == 'networkint':       
-        networkint.list_network_interfaces()
+        print(networkint.list_network_interfaces())
         
 
 
 
     elif task == 'speedtest':       
-        speedtest.speed_test()
+        print(speedtest.speed_test())
        
 
 

@@ -19,10 +19,11 @@ def scan_ports(target, port_input):
                 resp = sr1(pkt, timeout=0.5, verbose=False)
                 if resp and resp.haslayer(TCP) and resp[TCP].flags == 0x12:
                     results.append([port, "Open"])
-                else:
-                    results.append([port, "Closed/Filtered"])
             except Exception as e:
-                results.append([port, f"Error: {e}"])
+                pass  # Silently skip any exceptions for stability
+
+        if not results:
+            return("No open ports found.")
 
         return(tabulate(results, headers=["Port", "Status"], tablefmt="grid"))
 
