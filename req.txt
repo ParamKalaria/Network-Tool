@@ -2,13 +2,13 @@ scapy
 tabulate
 icmplib
 pyfiglet
+requests
+psutil
+ipaddress
 speedtest-cli
 platform
 subprocess
 re
-requests
 json
 sys
-psutil
-ipaddress
 time

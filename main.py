@@ -10,6 +10,7 @@ from tabulate import tabulate
 import sys
 
 
+
 def task_select():
     global task, ip
     task = None
@@ -21,7 +22,7 @@ def task_select():
     
     if not task:
         print("No task specified. Please provide a task as a command line argument.")
-        exit()
+        sys.exit()
     
     
    
@@ -33,7 +34,7 @@ def task_select():
         ip = sys.argv[2] if len(sys.argv) > 2 else None
         if not ip:
             print("No IP address specified. Please provide an IP address as a command line argument.")
-            exit()
+            sys.exit()
         print(ipinfo.ipinfo(ip))
         
 
@@ -47,7 +48,7 @@ def task_select():
         ip = sys.argv[2] if len(sys.argv) > 2 else None
         if not ip:
             print("No IP address specified. Please provide an IP address as a command line argument.")
-            exit()
+            sys.exit()
         print(traceroute.traceroute(ip))
        
 
@@ -61,12 +62,12 @@ def task_select():
         ip = sys.argv[2] if len(sys.argv) > 2 else None
         if not ip:
             print("No IP address specified. Please provide an IP address as a command line argument.")
-            exit()
+            sys.exit()
         
         subnet_mask = sys.argv[3] if len(sys.argv) > 3 else '24'
         if not sys.argv[3:]:
             print("No subnet mask specified. Defaulting to /24.")
-            exit()
+            sys.exit()
         print(networkscan.networkscan(ip, subnet_mask))
         
 
@@ -87,12 +88,12 @@ def task_select():
         ip = sys.argv[2] if len(sys.argv) > 2 else None
         if not ip:
             print("No IP address specified. Please provide an IP address as a command line argument.")
-            exit()
+            sys.exit()
         
         port_input = sys.argv[3] if len(sys.argv) > 3 else None
         if not port_input:
             print("No port or port range specified. Please provide a port or port range as a command line argument.")
-            exit()
+            sys.exit()
         
         print(portscanner.scan_ports(ip, port_input))
             
@@ -144,7 +145,7 @@ def task_select():
         print(f"Unknown task: {task}. Please provide a valid task.")
     
     
-    exit()
+    sys.exit()
     
 
 if __name__ == "__main__":
@@ -152,8 +153,8 @@ if __name__ == "__main__":
         task_select()
     except KeyboardInterrupt:
         print("\nProcess interrupted by user.")
-        exit()
+        sys.exit()
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-        exit()
+        sys.exit()
 
